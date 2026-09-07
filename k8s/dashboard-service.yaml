@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: app
+spec:
+  type: NodePort
+  selector:
+    app: dashboard
+  ports:
+    - port: 8501
+      targetPort: 8501
+      nodePort: 30080   # matches kind-config.yaml extraPortMappings -> hostPort 8501

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producer
+  namespace: app
+  labels:
+    app: producer
+    tier: pipeline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: producer
+  template:
+    metadata:
+      labels:
+        app: producer
+        tier: pipeline
+    spec:
+      containers:
+        - name: producer
+          image: order-analytics-producer:local   # kind load docker-image order-analytics-producer:local
+          imagePullPolicy: IfNotPresent
+          args: ["--rate", "3", "--suspicious-ratio", "0.05"]
+          envFrom:
+            - configMapRef:
+                name: pipeline-config
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 250m

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pipeline-config
+  namespace: app
+data:
+  KAFKA_BOOTSTRAP_SERVERS: "my-cluster-kafka-bootstrap.kafka.svc:9092"
+  ORDERS_TOPIC: "orders"
+  FRAUD_TOPIC: "fraud_alerts"
+  POSTGRES_HOST: "postgres.app.svc"
+  POSTGRES_PORT: "5432"
+  LOG_LEVEL: "INFO"

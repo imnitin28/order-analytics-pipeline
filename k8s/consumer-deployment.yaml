@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer
+  namespace: app
+  labels:
+    app: consumer
+    tier: pipeline
+spec:
+  # Bump to 2 once things are stable, to demo Kafka rebalancing partitions
+  # across replicas in the same consumer group.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+        tier: pipeline
+    spec:
+      containers:
+        - name: consumer
+          image: order-analytics-consumer:local   # kind load docker-image order-analytics-consumer:local
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: pipeline-config
+            - secretRef:
+                name: postgres-credentials
+          env:
+            - name: CONSUMER_GROUP_ID
+              value: "order-analytics-consumers"
+          resources:
+            requests:
+              memory: 192Mi
+              cpu: 150m
+            limits:
+              memory: 384Mi
+              cpu: 300m
